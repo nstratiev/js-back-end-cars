@@ -15,7 +15,7 @@ async function read() {
 
 async function write(data) {
     try {
-        await fs.writeFile(filePath, JSON.stringify(data));
+        await fs.writeFile(filePath, JSON.stringify(data, null, 2));
     } catch (err) {
         console.error('Database write error');
         console.error(err);
@@ -24,12 +24,25 @@ async function write(data) {
 }
 
 // CRUD functions
-async function getAll() {
+async function getAll(query) {
     const data = await read();
     // console.log(data['3ba2d888-1ce4']);
-    return Object
+    let carsArr = Object
         .entries(data)
         .map(([id, obj]) => Object.assign({}, { id }, obj));
+
+    if (query.search) {
+        carsArr = carsArr.filter(el => (el.name).toLocaleLowerCase().includes((query.search).toLocaleLowerCase()));
+    }
+    if (query.from) {
+        carsArr = carsArr.filter(el => el.price >= Number(query.from));
+    }
+    if (query.to) {
+        carsArr = carsArr.filter(el => el.price <= Number(query.to));
+    }
+
+    // console.log(query.search);
+    return carsArr;
 }
 
 async function getById(id) {
@@ -38,13 +51,26 @@ async function getById(id) {
     return Object.assign({}, { id }, car);
 }
 
+async function createItem(obj) {
+    // console.log(obj);
+    const data = await read();
+    const newId = nextId();
+    data[newId] = obj;
 
+    // console.log(data);
+    await write(data);
+}
+
+function nextId() {
+    return 'xxxxxxxx-xxxx'.replace(/x/g, (Math.random() * 16 | 0).toString(16));
+}
 
 // Функция, която декорира req / Функция, която връща друга функция
 module.exports = () => (req, res, next) => {
     req.storage = {
         getAll,
-        getById
+        getById,
+        createItem
     };
     next();
 };

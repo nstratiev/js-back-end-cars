@@ -16,5 +16,11 @@
     "description": "THE PRICE IS NON-NEGOTIABLE!!! Newly imported, 202 799 km, 90hp diesel. Manual transmission.",
     "imageUrl": "11642697845129757_i2.jpg",
     "price": 2699
+  },
+  "22222222-2222": {
+    "name": "Trabant 601",
+    "description": "Classic model ...",
+    "imageUrl": "",
+    "price": 1234
   }
 }
