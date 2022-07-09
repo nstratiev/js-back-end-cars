@@ -1,0 +1,17 @@
+<h1>Delete car data</h1>
+<div class="form">
+  {{#with car}}
+  <form action="/delete/{{id}}" method="post">
+    <label for="name">Name</label>
+    <input type="text" id="name" name="name" value="{{name}}" disabled>
+    <label for="description">Description</label>
+    <textarea id="description" name="description" disabled>{{description}}</textarea>
+    <label for="image">ImageUrl</label>
+    <input type="text" id="image" name="imageUrl" value="{{imageUrl}}" disabled>
+    <label for="price">Price</label>
+    <input type="number" name="price" id="price" value="{{price}}" disabled>
+
+    <input type="submit" value="Confirm delete">
+  </form>
+  {{/with}}
+</div>

@@ -61,16 +61,46 @@ async function createItem(obj) {
     await write(data);
 }
 
-function nextId() {
-    return 'xxxxxxxx-xxxx'.replace(/x/g, (Math.random() * 16 | 0).toString(16));
+async function deleteItem(id) {
+    const data = await read();
+
+    if (data.hasOwnProperty(id)) {
+        delete data[id];
+        await write(data);
+    } else {
+        throw new Error('No such id in database');
+    }
 }
+
+async function editItem(id, newObj) {
+    const data = await read();
+
+    if (data.hasOwnProperty(id)) {
+        data[id] = newObj;
+        await write(data);
+    } else {
+        throw new Error('No such id in database');
+    }
+}
+
+
+// function nextId() {
+//     return 'xxxxxxxx-xxxx'.replace(/x/g, (Math.random() * 16 | 0).toString(16));
+// }
+// Generate new id
+function nextId() {
+    return 'xxxxxxxx-xxxx'.replace(/x/g, () => (Math.random() * 16 | 0).toString(16));
+}
+
 
 // Функция, която декорира req / Функция, която връща друга функция
 module.exports = () => (req, res, next) => {
     req.storage = {
         getAll,
         getById,
-        createItem
+        createItem,
+        deleteItem,
+        editItem
     };
     next();
 };

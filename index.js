@@ -8,6 +8,8 @@ const create = require('./controllers/create.js');
 const { details } = require('./controllers/details.js');
 const { home } = require('./controllers/home.js');
 const { notFound } = require('./controllers/notFound.js');
+const del = require('./controllers/delete.js');
+const edit = require('./controllers/edit.js');
 
 const app = express();
 
@@ -25,6 +27,13 @@ app.route('/create')
     .get(create.get)
     .post(create.post);
 app.get('/details/:id', details);
+app.route('/delete/:id')
+    .get(del.get)
+    .post(del.post);
+app.route('/edit/:id')
+    .get(edit.get)
+    .post(edit.post);
+
 app.all('*', notFound);
 // app.get('*', notFound, { title: 'Page Not Found' });
 
